@@ -1,0 +1,96 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum MenuCategory {
+  Starters
+  MainCourse
+  Pasta
+  Seafood
+  Dessert
+  Drinks
+}
+
+enum GalleryCategory {
+  Interior
+  Chef
+  Dishes
+  Table
+  Drinks
+  Kitchen
+}
+
+enum Role {
+  USER
+  ADMIN
+}
+
+model User {
+  id            String        @id @default(cuid())
+  name          String
+  email         String        @unique
+  passwordHash  String
+  role          Role          @default(USER)
+  createdAt     DateTime      @default(now())
+  reservations  Reservation[]
+
+  @@map("users")
+}
+
+model MenuItem {
+  id              String       @id
+  name            String
+  description     String
+  price           Decimal      @db.Decimal(6, 2)
+  category        MenuCategory
+  image           String
+  signature       Boolean      @default(false)
+  signatureOrder  Int?
+  createdAt       DateTime     @default(now())
+  updatedAt       DateTime     @updatedAt
+
+  @@map("menu_items")
+}
+
+model GalleryImage {
+  id        String          @id
+  src       String
+  alt       String
+  category  GalleryCategory
+  sortOrder Int             @default(0)
+  createdAt DateTime        @default(now())
+
+  @@map("gallery_images")
+}
+
+model Review {
+  id        String   @id @default(cuid())
+  name      String
+  rating    Int
+  review    String
+  avatar    String?
+  createdAt DateTime @default(now())
+
+  @@map("reviews")
+}
+
+model Reservation {
+  id        String   @id @default(cuid())
+  name      String
+  phone     String
+  email     String
+  date      String
+  time      String
+  guests    Int
+  request   String?
+  createdAt DateTime @default(now())
+  userId    String?
+  user      User?    @relation(fields: [userId], references: [id], onDelete: SetNull)
+
+  @@map("reservations")
+}
