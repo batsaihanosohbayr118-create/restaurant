@@ -24,7 +24,7 @@ export default async function AdminDashboard() {
       </p>
       <h1 className="mt-2 font-display text-3xl text-ink">Dashboard</h1>
 
-      <div className="mt-10 grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4">
+      <div className="mt-10 grid grid-cols-2 gap-4 sm:gap-5 lg:grid-cols-4">
         {cards.map(({ label, value, href, icon: Icon }) => (
           <Link
             key={label}

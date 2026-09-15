@@ -5,6 +5,7 @@ import Image from "next/image";
 import { Star, ChevronLeft, ChevronRight, Quote } from "lucide-react";
 import type { Review } from "@/lib/types";
 import Reveal from "./Reveal";
+import ReviewForm from "./ReviewForm";
 
 export default function Reviews({ reviews }: { reviews: Review[] }) {
   const trackRef = useRef<HTMLDivElement>(null);
@@ -97,6 +98,8 @@ export default function Reviews({ reviews }: { reviews: Review[] }) {
             </div>
           ))}
         </div>
+
+        <ReviewForm />
       </div>
     </section>
   );

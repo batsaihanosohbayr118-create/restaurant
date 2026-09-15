@@ -6,6 +6,7 @@ import Image from "next/image";
 import { Plus, Pencil, Trash2, X } from "lucide-react";
 import { saveGalleryImage, deleteGalleryImage, type GalleryImageInput } from "@/app/actions/admin";
 import Select from "./Select";
+import { useConfirm } from "./ConfirmDialog";
 
 const categories = ["Interior", "Chef", "Dishes", "Table", "Drinks", "Kitchen"];
 
@@ -33,6 +34,7 @@ export default function GalleryAdminTable({ images }: { images: AdminGalleryImag
   const [form, setForm] = useState<GalleryImageInput>(emptyForm);
   const [error, setError] = useState<string | null>(null);
   const [submitting, setSubmitting] = useState(false);
+  const { confirm, ConfirmDialog } = useConfirm();
 
   const openCreate = () => {
     setForm({ ...emptyForm, sortOrder: images.length });
@@ -68,13 +70,15 @@ export default function GalleryAdminTable({ images }: { images: AdminGalleryImag
   };
 
   const handleDelete = async (id: string, alt: string) => {
-    if (!confirm(`Delete "${alt}"? This cannot be undone.`)) return;
+    const ok = await confirm({ description: `Delete "${alt}"? This cannot be undone.` });
+    if (!ok) return;
     await deleteGalleryImage(id);
     router.refresh();
   };
 
   return (
     <div>
+      {ConfirmDialog}
       <div className="flex items-center justify-between">
         <div>
           <p className="text-xs tracking-widest2 text-gold-dark" style={{ color: "#8A6A38" }}>

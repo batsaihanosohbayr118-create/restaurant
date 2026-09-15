@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { Plus, Pencil, Trash2, X, Star } from "lucide-react";
 import { saveReview, deleteReview, type ReviewInput } from "@/app/actions/admin";
 import type { Review } from "@/lib/types";
+import { useConfirm } from "./ConfirmDialog";
 
 const inputClasses =
   "w-full border border-ink/15 bg-white/60 px-3 py-2 text-sm text-ink placeholder:text-ink/40 focus:border-gold focus:outline-none transition-colors duration-300";
@@ -17,6 +18,7 @@ export default function ReviewsAdminTable({ reviews }: { reviews: Review[] }) {
   const [form, setForm] = useState<ReviewInput>(emptyForm);
   const [error, setError] = useState<string | null>(null);
   const [submitting, setSubmitting] = useState(false);
+  const { confirm, ConfirmDialog } = useConfirm();
 
   const openCreate = () => {
     setForm(emptyForm);
@@ -52,13 +54,15 @@ export default function ReviewsAdminTable({ reviews }: { reviews: Review[] }) {
   };
 
   const handleDelete = async (id: string, name: string) => {
-    if (!confirm(`Delete review from "${name}"? This cannot be undone.`)) return;
+    const ok = await confirm({ description: `Delete review from "${name}"? This cannot be undone.` });
+    if (!ok) return;
     await deleteReview(id);
     router.refresh();
   };
 
   return (
     <div>
+      {ConfirmDialog}
       <div className="flex items-center justify-between">
         <div>
           <p className="text-xs tracking-widest2 text-gold-dark" style={{ color: "#8A6A38" }}>

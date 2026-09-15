@@ -3,13 +3,12 @@
 import { useState, FormEvent } from "react";
 import { signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
-import Image from "next/image";
 import Link from "next/link";
 import { registerUser } from "@/app/actions/register";
 import Reveal from "@/components/Reveal";
 
 const inputClasses =
-  "w-full border-b border-ink/20 bg-transparent py-3 text-sm text-ink placeholder:text-ink/40 focus:border-gold focus:outline-none transition-colors duration-300";
+  "w-full border-b border-ink/20 bg-transparent py-3 text-sm text-ink placeholder:text-ink/40 focus:outline-none transition-colors duration-300 peer";
 
 export default function RegisterPage() {
   const router = useRouter();
@@ -58,20 +57,6 @@ export default function RegisterPage() {
 
   return (
     <section className="flex min-h-[100svh] flex-col bg-linen">
-      <div className="px-6 pt-8 lg:px-10">
-        <Link href="/" className="inline-flex items-center gap-2">
-          <Image
-            src="/logo/download.png"
-            alt="VELORA"
-            width={36}
-            height={34}
-            className="shrink-0 object-contain"
-          />
-          <span className="font-display text-lg tracking-[0.15em] text-ink">
-            VELORA
-          </span>
-        </Link>
-      </div>
 
       <div className="flex flex-1 flex-col justify-center px-6 py-12 lg:px-10">
         <div className="mx-auto w-full max-w-md">
@@ -90,61 +75,73 @@ export default function RegisterPage() {
                 <label htmlFor="name" className="mb-1 block text-xs text-ink/50">
                   Full Name
                 </label>
-                <input
-                  id="name"
-                  required
-                  value={name}
-                  onChange={(e) => setName(e.target.value)}
-                  placeholder="Jane Doe"
-                  className={inputClasses}
-                />
+                <div className="relative">
+                  <input
+                    id="name"
+                    required
+                    value={name}
+                    onChange={(e) => setName(e.target.value)}
+                    placeholder="Jane Doe"
+                    className={inputClasses}
+                  />
+                  <span className="pointer-events-none absolute bottom-0 left-0 h-[1.5px] w-full origin-center scale-x-0 bg-gold transition-transform duration-300 ease-out peer-focus:scale-x-100" />
+                </div>
               </div>
 
               <div>
                 <label htmlFor="email" className="mb-1 block text-xs text-ink/50">
                   Email
                 </label>
-                <input
-                  id="email"
-                  type="email"
-                  required
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  placeholder="jane@email.com"
-                  className={inputClasses}
-                />
+                <div className="relative">
+                  <input
+                    id="email"
+                    type="email"
+                    required
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    placeholder="jane@email.com"
+                    className={inputClasses}
+                  />
+                  <span className="pointer-events-none absolute bottom-0 left-0 h-[1.5px] w-full origin-center scale-x-0 bg-gold transition-transform duration-300 ease-out peer-focus:scale-x-100" />
+                </div>
               </div>
 
               <div>
                 <label htmlFor="password" className="mb-1 block text-xs text-ink/50">
                   Password
                 </label>
-                <input
-                  id="password"
-                  type="password"
-                  required
-                  minLength={8}
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  placeholder="At least 8 characters"
-                  className={inputClasses}
-                />
+                <div className="relative">
+                  <input
+                    id="password"
+                    type="password"
+                    required
+                    minLength={8}
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    placeholder="At least 8 characters"
+                    className={inputClasses}
+                  />
+                  <span className="pointer-events-none absolute bottom-0 left-0 h-[1.5px] w-full origin-center scale-x-0 bg-gold transition-transform duration-300 ease-out peer-focus:scale-x-100" />
+                </div>
               </div>
 
               <div>
                 <label htmlFor="confirmPassword" className="mb-1 block text-xs text-ink/50">
                   Confirm Password
                 </label>
-                <input
-                  id="confirmPassword"
-                  type="password"
-                  required
-                  minLength={8}
-                  value={confirmPassword}
-                  onChange={(e) => setConfirmPassword(e.target.value)}
-                  placeholder="••••••••"
-                  className={inputClasses}
-                />
+                <div className="relative">
+                  <input
+                    id="confirmPassword"
+                    type="password"
+                    required
+                    minLength={8}
+                    value={confirmPassword}
+                    onChange={(e) => setConfirmPassword(e.target.value)}
+                    placeholder="••••••••"
+                    className={inputClasses}
+                  />
+                  <span className="pointer-events-none absolute bottom-0 left-0 h-[1.5px] w-full origin-center scale-x-0 bg-gold transition-transform duration-300 ease-out peer-focus:scale-x-100" />
+                </div>
               </div>
 
               {error && <p className="text-center text-sm text-red-600">{error}</p>}

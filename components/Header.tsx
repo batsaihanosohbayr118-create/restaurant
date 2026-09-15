@@ -5,7 +5,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 import { useSession, signOut } from "next-auth/react";
-import { Menu, X, LogOut } from "lucide-react";
+import { Menu, X, LogOut, LayoutDashboard } from "lucide-react";
 import AccountMenu from "./AccountMenu";
 
 const navLinks = [
@@ -84,7 +84,7 @@ export default function Header() {
             {!isAdmin && (
               <Link
                 href="/reservation"
-                className="inline-flex items-center border border-gold px-6 py-2.5 text-sm text-gold hover:bg-gold hover:text-ink transition-colors duration-300"
+                className="inline-flex items-center border border-gold bg-gold px-6 py-2.5 text-sm text-ink hover:bg-transparent hover:text-gold transition-colors duration-300"
               >
                 Reserve a Table
               </Link>
@@ -124,13 +124,24 @@ export default function Header() {
           })}
 
           {session ? (
-            <button
-              onClick={() => signOut({ callbackUrl: "/" })}
-              className="flex items-center gap-2 border-b border-linen/10 py-3 text-base text-linen/90"
-            >
-              <LogOut size={16} />
-              Logout ({session.user.name?.split(" ")[0]})
-            </button>
+            <>
+              {isAdmin && (
+                <Link
+                  href="/admin"
+                  className="flex items-center gap-2 border-b border-linen/10 py-3 text-base text-linen/90"
+                >
+                  <LayoutDashboard size={16} />
+                  Admin Panel
+                </Link>
+              )}
+              <button
+                onClick={() => signOut({ callbackUrl: "/" })}
+                className="flex items-center gap-2 border-b border-linen/10 py-3 text-base text-linen/90"
+              >
+                <LogOut size={16} />
+                Logout ({session.user.name?.split(" ")[0]})
+              </button>
+            </>
           ) : (
             <Link
               href="/login"
@@ -143,7 +154,7 @@ export default function Header() {
           {!isAdmin && (
             <Link
               href="/reservation"
-              className="mt-4 inline-flex justify-center border border-gold px-6 py-3 text-sm text-gold"
+              className="mt-4 inline-flex justify-center border border-gold bg-gold px-6 py-3 text-sm text-ink hover:bg-transparent hover:text-gold transition-colors duration-300"
             >
               Reserve a Table
             </Link>

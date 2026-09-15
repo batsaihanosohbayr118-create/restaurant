@@ -38,6 +38,7 @@ model User {
   role          Role          @default(USER)
   createdAt     DateTime      @default(now())
   reservations  Reservation[]
+  review        Review?
 
   @@map("users")
 }
@@ -75,6 +76,8 @@ model Review {
   review    String
   avatar    String?
   createdAt DateTime @default(now())
+  userId    String?  @unique
+  user      User?    @relation(fields: [userId], references: [id], onDelete: SetNull)
 
   @@map("reviews")
 }

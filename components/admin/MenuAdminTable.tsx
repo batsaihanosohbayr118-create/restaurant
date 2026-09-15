@@ -7,6 +7,7 @@ import { Plus, Pencil, Trash2, X, Star } from "lucide-react";
 import { saveMenuItem, deleteMenuItem, type MenuItemInput } from "@/app/actions/admin";
 import { menuCategories } from "@/lib/types";
 import Select from "./Select";
+import { useConfirm } from "./ConfirmDialog";
 
 interface AdminMenuItem {
   id: string;
@@ -38,6 +39,7 @@ export default function MenuAdminTable({ items }: { items: AdminMenuItem[] }) {
   const [form, setForm] = useState<MenuItemInput>(emptyForm);
   const [error, setError] = useState<string | null>(null);
   const [submitting, setSubmitting] = useState(false);
+  const { confirm, ConfirmDialog } = useConfirm();
 
   const openCreate = () => {
     setForm(emptyForm);
@@ -76,13 +78,15 @@ export default function MenuAdminTable({ items }: { items: AdminMenuItem[] }) {
   };
 
   const handleDelete = async (id: string, name: string) => {
-    if (!confirm(`Delete "${name}"? This cannot be undone.`)) return;
+    const ok = await confirm({ description: `Delete "${name}"? This cannot be undone.` });
+    if (!ok) return;
     await deleteMenuItem(id);
     router.refresh();
   };
 
   return (
     <div>
+      {ConfirmDialog}
       <div className="flex items-center justify-between">
         <div>
           <p className="text-xs tracking-widest2 text-gold-dark" style={{ color: "#8A6A38" }}>
@@ -224,7 +228,45 @@ export default function MenuAdminTable({ items }: { items: AdminMenuItem[] }) {
         </form>
       )}
 
-      <div className="mt-8 overflow-x-auto border border-ink/10">
+      <div className="-mx-4 mt-8 px-4 md:hidden">
+        <div className="flex snap-x snap-mandatory gap-4 overflow-x-auto pb-4 [-webkit-overflow-scrolling:touch] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+          {items.map((item) => (
+            <div
+              key={item.id}
+              className="flex w-[78%] shrink-0 snap-center flex-col border border-ink/10 bg-white/40 transition-transform duration-300 ease-signature active:scale-[0.98]"
+            >
+              <div className="relative aspect-[4/3] w-full overflow-hidden bg-ink/5">
+                <Image src={item.image} alt={item.name} fill sizes="78vw" className="object-cover" />
+                {item.signature && (
+                  <Star
+                    size={18}
+                    className="absolute right-2.5 top-2.5 fill-gold text-gold drop-shadow"
+                    style={{ color: "#B08B4F", fill: "#B08B4F" }}
+                  />
+                )}
+              </div>
+              <div className="flex flex-1 flex-col gap-1.5 p-4">
+                <p className="text-lg leading-snug text-ink">{item.name}</p>
+                <p className="text-sm text-ink/50">{item.category}</p>
+                <p className="text-base text-gold-dark" style={{ color: "#8A6A38" }}>
+                  ${item.price}
+                </p>
+                <div className="mt-auto flex justify-end gap-4 pt-3">
+                  <button onClick={() => openEdit(item)} className="text-ink/50 hover:text-gold">
+                    <Pencil size={19} />
+                  </button>
+                  <button onClick={() => handleDelete(item.id, item.name)} className="text-ink/50 hover:text-red-600">
+                    <Trash2 size={19} />
+                  </button>
+                </div>
+              </div>
+            </div>
+          ))}
+          {items.length === 0 && <p className="py-8 text-ink/40">No menu items yet.</p>}
+        </div>
+      </div>
+
+      <div className="mt-8 hidden overflow-x-auto border border-ink/10 md:block">
         <table className="w-full min-w-[720px] text-left text-sm">
           <thead>
             <tr className="border-b border-ink/10 bg-white/40 text-xs uppercase tracking-wide text-ink/40">

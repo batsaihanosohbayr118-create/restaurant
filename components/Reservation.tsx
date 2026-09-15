@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, FormEvent } from "react";
+import { useState, useRef, useEffect, FormEvent } from "react";
 import { CheckCircle2 } from "lucide-react";
 import { createReservation } from "@/app/actions/reservations";
 import DatePicker from "./DatePicker";
@@ -19,6 +19,13 @@ export default function Reservation() {
   const [guests, setGuests] = useState("2");
   const [date, setDate] = useState("");
   const [time, setTime] = useState("");
+  const successRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (submitted) {
+      successRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+    }
+  }, [submitted]);
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -63,7 +70,7 @@ export default function Reservation() {
 
         <Reveal delay={120} className="mt-14">
           {submitted ? (
-            <div className="flex flex-col items-center border border-gold/40 px-8 py-16 text-center animate-scale-in">
+            <div ref={successRef} className="flex flex-col items-center border border-gold/40 px-8 py-16 text-center animate-scale-in scroll-mt-32">
               <CheckCircle2 size={40} className="text-gold" style={{ color: "#B08B4F" }} />
               <h3 className="mt-5 font-display text-2xl text-ink">
                 Reservation Requested
