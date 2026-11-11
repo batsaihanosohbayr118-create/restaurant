@@ -1,25 +1,16 @@
-import Image from "next/image";
 import Link from "next/link";
 import Reveal from "./Reveal";
+import HangingChef from "./HangingChef";
 import TypewriterText from "./TypewriterText";
 
 export default function About() {
   return (
-    <section id="about" className="bg-linen py-12 md:py-16">
+    <section id="about" className="overflow-hidden bg-linen pb-12 md:pb-16">
       <div className="mx-auto grid max-w-8xl grid-cols-1 items-center gap-14 px-6 lg:grid-cols-2 lg:gap-20 lg:px-10">
-        <Reveal direction="left" className="relative order-2 lg:order-1">
-          <div className="relative aspect-[4/5] w-full overflow-hidden">
-            <Image
-              src="/chef/chef.png"
-              alt="VELORA head chef plating a dish"
-              fill
-              sizes="(min-width: 1024px) 45vw, 100vw"
-              className="object-contain"
-            />
-          </div>
-        </Reveal>
+        {/* Rope starts at the very top of the section */}
+        <HangingChef className="order-2 self-stretch lg:order-1" />
 
-        <Reveal delay={120} className="order-1 lg:order-2 lg:pl-6">
+        <Reveal delay={120} className="order-1 pt-12 md:pt-16 lg:order-2 lg:pl-6">
           <p className="text-xs tracking-widest2 text-gold-dark" style={{ color: "#8A6A38" }}>
             Our Story
           </p>

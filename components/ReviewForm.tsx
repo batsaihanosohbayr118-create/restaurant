@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState, FormEvent } from "react";
+import { useEffect, useRef, useState, FormEvent } from "react";
 import { useRouter } from "next/navigation";
 import { useSession } from "next-auth/react";
 import { Star, CheckCircle2, Trash2 } from "lucide-react";
@@ -15,6 +15,15 @@ export default function ReviewForm() {
   const [rating, setRating] = useState(5);
   const [hoverRating, setHoverRating] = useState(0);
   const [text, setText] = useState("");
+  const textareaRef = useRef<HTMLTextAreaElement>(null);
+
+  // Grow the textarea with its content instead of reserving empty lines.
+  useEffect(() => {
+    const el = textareaRef.current;
+    if (!el) return;
+    el.style.height = "auto";
+    el.style.height = `${el.scrollHeight}px`;
+  }, [text]);
   const [submitting, setSubmitting] = useState(false);
   const [deleting, setDeleting] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -123,12 +132,13 @@ export default function ReviewForm() {
           </div>
 
           <textarea
+            ref={textareaRef}
             value={text}
             onChange={(e) => setText(e.target.value)}
-            rows={3}
+            rows={1}
             maxLength={500}
             placeholder="Tell other guests what stood out about your visit..."
-            className="mt-5 w-full resize-none border-b border-linen/20 bg-transparent py-2 text-sm text-linen placeholder:text-linen/30 focus:border-gold focus:outline-none transition-colors duration-300"
+            className="mt-5 block max-h-48 w-full resize-none overflow-y-auto border-b border-linen/20 bg-transparent py-2 text-sm leading-relaxed text-linen placeholder:text-linen/30 focus:border-gold focus:outline-none transition-colors duration-300"
           />
 
           {error && <p className="mt-3 text-center text-sm text-red-400">{error}</p>}
